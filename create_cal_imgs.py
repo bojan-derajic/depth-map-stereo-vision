@@ -28,8 +28,11 @@ if __name__ == '__main__':
             break
 
         if cv.waitKey(5) == ord(' '):
-            cv.imwrite('./stereo_images/stereoL/imageL_' + str(n) + '.png', frameL)
-            cv.imwrite('./stereo_images/stereoR/imageR_' + str(n) + '.png', frameR)
+            cv.imwrite(f'./stereo_images/stereoL/imageL_{n}.png', frameL)
+            cv.imwrite(f'./stereo_images/stereoR/imageR_{n}.png', frameR)
             
             print(f'Image pair {n} saved successfully!')
             n += 1
+
+    stereo_cam.release()
+    cv.destroyAllWindows()
