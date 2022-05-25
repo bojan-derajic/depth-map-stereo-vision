@@ -15,8 +15,6 @@ if __name__ == '__main__':
     
     while(True):
         ret, stereo_frame = stereo_cam.read()
-
-        # cv.imshow('Stereo Camera', stereo_frame)
         
         frameL = stereo_frame[:, :stereo_frame.shape[1]//2, :]
         frameR = stereo_frame[:, stereo_frame.shape[1]//2:, :]

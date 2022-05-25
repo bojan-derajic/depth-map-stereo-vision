@@ -1,4 +1,3 @@
-#%%
 from distutils.log import error
 import cv2 as cv
 import numpy as np
@@ -13,9 +12,11 @@ if __name__ == '__main__':
     criteria = (cv.TERM_CRITERIA_MAX_ITER + cv.TERM_CRITERIA_EPS, 30, 0.001)
     
     M = 7
-    N = 4 
+    N = 4
+    squareSize = 1.0
+
     objp = np.zeros((M*N, 3), np.float32)
-    objp[:, :2] = np.mgrid[0:M, 0:N].T.reshape(-1, 2)
+    objp[:, :2] = np.mgrid[0:M, 0:N].T.reshape(-1, 2) * squareSize
     
     img_ptsL = []
     img_ptsR = []
@@ -77,28 +78,34 @@ if __name__ == '__main__':
     stereo_mapL = cv.initUndistortRectifyMap(opt_mtxL, distL, rectL, proj_matL, (wL, hL), cv.CV_16SC2)
     stereo_mapR = cv.initUndistortRectifyMap(opt_mtxR, distR, rectR, proj_matR, (wR, hR), cv.CV_16SC2)
     
-    '''
     print('Saving parameters...')
-    cv_file = cv.FileStorage('stereo_undis_map.xml', cv.FILE_STORAGE_WRITE)
-    cv_file.write('Left_Stereo_Map_x', stereo_mapL[0])
-    cv_file.write('Left_Stereo_Map_y', stereo_mapL[1])
-    cv_file.write('Right_Stereo_Map_x', stereo_mapR[0])
-    cv_file.write('Right_Stereo_Map_y', stereo_mapR[1])
+    cv_file = cv.FileStorage('stereo_cam_map.xml', cv.FILE_STORAGE_WRITE)
+    cv_file.write('stereo_mapL_x', stereo_mapL[0])
+    cv_file.write('stereo_mapL_y', stereo_mapL[1])
+    cv_file.write('stereo_mapR_x', stereo_mapR[0])
+    cv_file.write('stereo_mapR_y', stereo_mapR[1])
+    cv_file.write('roiL', roiL)
+    cv_file.write('roiR', roiR)
+    cv_file.write('img_size', (wL, hL))
     cv_file.release()
-    '''
     
     imgL = cv.imread(pathL + 'imageL_10.png')
     imgR = cv.imread(pathR + 'imageR_10.png')
     stereo_img_raw = np.concatenate([imgL, imgR], 1)
     
-    
     imgL_rect = cv.remap(imgL, stereo_mapL[0], stereo_mapL[1], cv.INTER_LANCZOS4, cv.BORDER_CONSTANT, 0)
     imgR_rect = cv.remap(imgR, stereo_mapR[0], stereo_mapR[1], cv.INTER_LANCZOS4, cv.BORDER_CONSTANT, 0)
     
-    #imgL_rect = cv.undistort(imgL, opt_mtxL, distL)
-    #imgR_rect = cv.undistort(imgR, opt_mtxR, distR)
-    
+    x = max(roiL[0], roiR[0])
+    y = max(roiL[1], roiR[1])
+    w = min(roiL[2], roiR[2])
+    h = min(roiL[3], roiR[3])
+
+    imgL_rect = cv.resize(imgL_rect[y:y+h, x:x+w], (wL, hL), interpolation=cv.INTER_CUBIC)
+    imgR_rect = cv.resize(imgR_rect[y:y+h, x:x+w], (wL, hL), interpolation=cv.INTER_CUBIC)
+
     stereo_img_rect = np.concatenate([imgL_rect, imgR_rect], 1)
     
-    cv.imshow('Rectification', np.concatenate([stereo_img_raw, stereo_img_rect], 0))
+    cv.imshow('Raw stereo image', stereo_img_raw)
+    cv.imshow('Rectified stereo image', stereo_img_rect)
     cv.waitKey(0)
