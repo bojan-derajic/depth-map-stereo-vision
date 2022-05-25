@@ -24,10 +24,10 @@ if __name__ == '__main__':
         cv.imshow('Left Camera', frameL)
         cv.imshow('Right Camera', frameR)
 
-        if cv.waitKey(5) == ord('q'):
+        if cv.waitKey(1) == ord('q'):
             break
 
-        if cv.waitKey(5) == ord(' '):
+        if cv.waitKey(1) == ord(' '):
             cv.imwrite(f'./stereo_images/stereoL/imageL_{n}.png', frameL)
             cv.imwrite(f'./stereo_images/stereoR/imageR_{n}.png', frameR)
             
