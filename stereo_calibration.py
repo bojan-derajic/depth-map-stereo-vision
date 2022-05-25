@@ -66,4 +66,18 @@ if __name__ == '__main__':
         obj_pts, img_ptsL, img_ptsR, opt_mtxL, distL, opt_mtxR, distR, (wL, hL), criteria_stereo, flags 
     )
     
+    rectify_scale = 1
+    rectL, rectR, proj_matL, proj_matR, Q, roiL, roiR = cv.stereoRectify(
+        opt_mtxL, distL, opt_mtxR, distR, (wL, hL), Rot, Trns, rectify_scale, (0, 0)
+    )
 
+    stereo_mapL = cv.initUndistortRectifyMap(opt_mtxL, distL, rectL, proj_matL, (wL, hL), cv.CV_16SC2)
+    stereo_mapR = cv.initUndistortRectifyMap(opt_mtxR, distR, rectR, proj_matR, (wR, hR), cv.CV_16SC2)
+
+    print('Saving parameters...')
+    cv_file = cv.FileStorage('improved_params2.xml', cv.FILE_STORAGE_WRITE)
+    cv_file.write('Left_Stereo_Map_x', stereo_mapL[0])
+    cv_file.write('Left_Stereo_Map_y', stereo_mapL[1])
+    cv_file.write('Right_Stereo_Map_x', stereo_mapR[0])
+    cv_file.write('Right_Stereo_Map_y', stereo_mapR[1])
+    cv_file.release()
