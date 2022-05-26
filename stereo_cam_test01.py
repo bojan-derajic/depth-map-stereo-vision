@@ -9,7 +9,7 @@ if __name__ == '__main__':
         stereo_mapL_x = cv_file.getNode('stereo_mapL_x').mat()
         stereo_mapL_y = cv_file.getNode('stereo_mapL_y').mat()
         stereo_mapR_x = cv_file.getNode('stereo_mapR_x').mat()
-        stereo_mapR_y = cv_file.getNode('stereo_mapL_y').mat()
+        stereo_mapR_y = cv_file.getNode('stereo_mapR_y').mat()
         roiL = np.squeeze(np.int32(cv_file.getNode('roiL').mat()))
         roiR = np.squeeze(np.int32(cv_file.getNode('roiR').mat()))
         W, H = np.squeeze(np.int32(cv_file.getNode('img_size').mat()))
