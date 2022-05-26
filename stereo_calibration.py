@@ -11,8 +11,8 @@ if __name__ == '__main__':
     
     criteria = (cv.TERM_CRITERIA_MAX_ITER + cv.TERM_CRITERIA_EPS, 30, 0.001)
     
-    M = 7
-    N = 4
+    M = 10
+    N = 7
     squareSize = 1.0
 
     objp = np.zeros((M*N, 3), np.float32)
@@ -46,7 +46,7 @@ if __name__ == '__main__':
             cv.drawChessboardCorners(imgR, (M, N), cornersR, retR)
     
             cv.imshow('Stereo Calibration', np.concatenate([imgL, imgR], 1))
-            cv.waitKey(1)
+            cv.waitKey(100)
     
             obj_pts.append(objp)
             img_ptsL.append(cornersL)
