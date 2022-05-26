@@ -20,14 +20,14 @@ if __name__ == '__main__':
     w = min(roiL[2], roiR[2])
     h = min(roiL[3], roiR[3])
 
-    stereo_cam = cv.VideoCapture(1)
+    stereo_cam = cv.VideoCapture(0)
 
     if not stereo_cam.isOpened():
         print('Cannot open the Camera')
         exit()
 
-    stereo_cam.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
-    stereo_cam.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+    stereo_cam.set(cv.CAP_PROP_FRAME_WIDTH, 2*W)
+    stereo_cam.set(cv.CAP_PROP_FRAME_HEIGHT, H)
 
     while(True):
         ret, stereo_frame = stereo_cam.read()

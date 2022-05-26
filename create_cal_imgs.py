@@ -1,5 +1,8 @@
 import cv2 as cv
 
+# stereoW, stereoH = (2560, 720)
+stereoW, stereoH = (1280, 480)
+
 
 if __name__ == '__main__':
     stereo_cam = cv.VideoCapture(1)
@@ -8,8 +11,8 @@ if __name__ == '__main__':
         print('Cannot open the Camera')
         exit()
 
-    stereo_cam.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
-    stereo_cam.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+    stereo_cam.set(cv.CAP_PROP_FRAME_WIDTH, stereoW)
+    stereo_cam.set(cv.CAP_PROP_FRAME_HEIGHT, stereoH)
     
     n = 0
     
