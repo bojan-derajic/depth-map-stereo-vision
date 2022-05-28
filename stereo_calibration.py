@@ -13,10 +13,10 @@ if __name__ == '__main__':
     
     M = 10
     N = 7
-    squareSize = 1.0
+    square_size = 22     # [mm]
 
     objp = np.zeros((M*N, 3), np.float32)
-    objp[:, :2] = np.mgrid[0:M, 0:N].T.reshape(-1, 2) * squareSize
+    objp[:, :2] = np.mgrid[0:M, 0:N].T.reshape(-1, 2) * square_size
     
     img_ptsL = []
     img_ptsR = []
@@ -55,18 +55,18 @@ if __name__ == '__main__':
     cv.destroyAllWindows() 
     
     hL, wL = imgL_gray.shape[:2]
-    retL, mtxL, distL, rvecsL, tvecs = cv.calibrateCamera(obj_pts, img_ptsL, (wL, hL), None, None)
+    retL, mtxL, distL, rvecsL, tvecsL = cv.calibrateCamera(obj_pts, img_ptsL, (wL, hL), None, None)
     opt_mtxL, roiL = cv.getOptimalNewCameraMatrix(mtxL, distL, (wL, hL), 0, (wL, hL))
     
     hR, wR = imgR_gray.shape[:2]
-    retR, mtxR, distR, rvecsR, tvecs = cv.calibrateCamera(obj_pts, img_ptsR, (wR, hR), None, None) 
+    retR, mtxR, distR, rvecsR, tvecsR = cv.calibrateCamera(obj_pts, img_ptsR, (wR, hR), None, None) 
     opt_mtxR, roiR = cv.getOptimalNewCameraMatrix(mtxR, distR, (wR, hR), 0, (wR, hR))
     
     flags = cv.CALIB_FIX_INTRINSIC
     
     criteria_stereo = (cv.TERM_CRITERIA_MAX_ITER + cv.TERM_CRITERIA_EPS, 30, 0.001)
     
-    retS, opt_mtxL, distL, opt_mtxR, distR, Rot, Trns, Emat, Fmat = cv.stereoCalibrate(
+    retS, opt_mtxL, distL, opt_mtxR, distR, Rot, Trns, E_mat, F_mat = cv.stereoCalibrate(
         obj_pts, img_ptsL, img_ptsR, opt_mtxL, distL, opt_mtxR, distR, (wL, hL), criteria_stereo, flags 
     )
     
