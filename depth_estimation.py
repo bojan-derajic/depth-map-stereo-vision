@@ -35,11 +35,11 @@ if __name__ == '__main__':
     
     block_size = 7
     d_min = 10
-    d_max = 8*16
+    d_num = 8*16
 
     sgbm = cv.StereoSGBM_create(
         minDisparity = d_min,
-        numDisparities = d_max,
+        numDisparities = d_num,
         blockSize = block_size,
         P1 = 8*2*block_size**2,
         P2 = 32*2*block_size**2,
@@ -64,8 +64,8 @@ if __name__ == '__main__':
     ax_depth.axis('off')
 
     img_stereo = ax_stereo.imshow(np.zeros((H, 2*W)), vmin=0, vmax=255)
-    img_disp = ax_disp.imshow(np.zeros((H, W)), cmap='plasma', vmin=d_min, vmax=d_max)
-    img_depth = ax_depth.imshow(np.zeros((H, W)), cmap='plasma_r', vmin=f*B/d_max, vmax=f*B/d_min)
+    img_disp = ax_disp.imshow(np.zeros((H, W)), cmap='plasma', vmin=d_min, vmax=d_min+d_num)
+    img_depth = ax_depth.imshow(np.zeros((H, W)), cmap='plasma_r', vmin=f*B/(d_min+d_num), vmax=f*B/d_min)
 
     fig.colorbar(img_disp, ax=ax_disp)
     fig.colorbar(img_depth, ax=ax_depth)
@@ -90,12 +90,12 @@ if __name__ == '__main__':
         frameR_gray = cv.cvtColor(frameR, cv.COLOR_RGB2GRAY)
 
         disp_map = np.uint8(sgbm.compute(frameL_gray, frameR_gray)/16)
-        disp_map = disp_map[:, d_min+d_max:]
+        disp_map = disp_map[:, d_min+d_num:]
         disp_map = cv.medianBlur(disp_map, 5)
         disp_map = cv.bilateralFilter(disp_map, d=0, sigmaColor=2, sigmaSpace=3)
 
         depth_map = f*B/disp_map
-
+        
         img_stereo.set_data(stereo_frame)
         img_disp.set_data(disp_map)
         img_depth.set_data(depth_map)
