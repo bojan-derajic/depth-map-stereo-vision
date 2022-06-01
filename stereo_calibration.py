@@ -89,8 +89,8 @@ if __name__ == '__main__':
     cv_file.write('img_size', (wL, hL))
     cv_file.release()
     
-    imgL = cv.imread(pathL + 'imageL_10.png')
-    imgR = cv.imread(pathR + 'imageR_10.png')
+    imgL = cv.imread(pathL + 'imageL_0.png')
+    imgR = cv.imread(pathR + 'imageR_0.png')
     stereo_img_raw = np.concatenate([imgL, imgR], 1)
     
     imgL_rect = cv.remap(imgL, stereo_mapL[0], stereo_mapL[1], cv.INTER_LANCZOS4, cv.BORDER_CONSTANT, 0)
